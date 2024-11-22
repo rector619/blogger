@@ -1,0 +1,136 @@
+openapi: 3.1.0
+info:
+  title: Blog App
+  description: API for creating, retrieving, updating, and deleting blogs.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Local Server
+paths:
+  /blogs:
+    get:
+      summary: Get all blogs
+      description: Retrieve a list of all blogs.
+      responses:
+        '200':
+          description: A list of blogs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Blog'
+    post:
+      summary: Create a new blog
+      description: Add a new blog to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogInput'
+      responses:
+        '201':
+          description: Blog created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+  /blogs/{id}:
+    get:
+      summary: Get a blog by ID
+      description: Retrieve a blog by its unique identifier.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the blog.
+      responses:
+        '200':
+          description: The blog details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+        '404':
+          description: Blog not found.
+    put:
+      summary: Update a blog
+      description: Update an existing blog by its unique identifier.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the blog to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogInput'
+      responses:
+        '200':
+          description: Blog updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+        '404':
+          description: Blog not found.
+    delete:
+      summary: Delete a blog
+      description: Delete an existing blog by its unique identifier.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the blog to delete.
+      responses:
+        '204':
+          description: Blog deleted successfully.
+        '404':
+          description: Blog not found.
+components:
+  schemas:
+    Blog:
+      type: object
+      properties:
+        ID:
+          type: string
+          description: Unique identifier of the blog.
+        Title:
+          type: string
+          description: Title of the blog.
+        Content:
+          type: string
+          description: Main content of the blog.
+        Author:
+          type: string
+          description: Name of the blog's author.
+        CreatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the blog was created.
+        UpdatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the blog was last updated.
+    BlogInput:
+      type: object
+      properties:
+        Title:
+          type: string
+          description: Title of the blog.
+        Content:
+          type: string
+          description: Main content of the blog.
+        Author:
+          type: string
+          description: Name of the blog's author.
+
