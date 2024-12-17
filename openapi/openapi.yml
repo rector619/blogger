@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.0.0
 info:
   title: Blog App
   description: API for creating, retrieving, updating, and deleting blogs.
@@ -7,6 +7,40 @@ servers:
   - url: http://localhost:3000
     description: Local Server
 paths:
+  /auth/signup:
+    post:
+      summary: User Sign-Up
+      description: Create a new user account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpInput'
+      responses:
+        '201':
+          description: User created successfully.
+        '400':
+          description: Invalid input data.
+  /auth/signin:
+    post:
+      summary: User Sign-In
+      description: Authenticate a user and return a token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInInput'
+      responses:
+        '200':
+          description: Authentication successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Authentication failed.
   /blogs:
     get:
       summary: Get all blogs
@@ -98,6 +132,30 @@ paths:
           description: Blog not found.
 components:
   schemas:
+    SignUpInput:
+      type: object
+      properties:
+        Email:
+          type: string
+          description: User's email address.
+        Password:
+          type: string
+          description: User's password.
+    SignInInput:
+      type: object
+      properties:
+        Email:
+          type: string
+          format: email
+        Password:
+          type: string
+          description: User's password.
+    AuthResponse:
+      type: object
+      properties:
+        Token:
+          type: string
+          description: JWT token for authenticated requests.
     Blog:
       type: object
       properties:
@@ -115,11 +173,9 @@ components:
           description: Name of the blog's author.
         CreatedAt:
           type: string
-          format: date-time
           description: Timestamp when the blog was created.
         UpdatedAt:
           type: string
-          format: date-time
           description: Timestamp when the blog was last updated.
     BlogInput:
       type: object
@@ -133,4 +189,5 @@ components:
         Author:
           type: string
           description: Name of the blog's author.
+
 
